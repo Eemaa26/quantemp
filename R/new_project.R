@@ -1,6 +1,6 @@
 #' Project Template
 #' 
-#' Generate a project template to increase efficiency.
+#' Generate a bnasic quantitative project template to increase efficiency.
 #' 
 #' @param project A character vector of the project name.
 #' @param path The path to where the project should be created.  Default is the 
@@ -71,7 +71,7 @@
 #' @return Creates a project template.
 #' @keywords project, workflow
 #' @export
-new_project <- function(project = "new", path = getwd()) {
+new_project <- function(project = "new", path = getwd(), ...) {
     WD <- getwd()
     on.exit(setwd(WD))
     if(file.exists(paste0(path, "/", project))) {
@@ -84,14 +84,15 @@ new_project <- function(project = "new", path = getwd()) {
             delete(paste0(path, "/", project))
         }
     }
-    x <- suppressWarnings(invisible(folder(folder.name=paste0(path, "/", project))))
+    suppressWarnings(invisible(dir.create(file.path(path, project),
+        recursive = TRUE))) 
+    x <- file.path(path, project)  
     setwd(x)
     ANALYSIS <- CODEBOOK <- DATA <- DATA_FOR_REVIEW <- RAW_DATA <- NULL
-    RAW_TRANSCRIPTS <- PLOTS <- TABLES <- CM_DATA <- WORD_LISTS <- NULL
-    REPORTS <- CORRESPONDENCE <- DOCUMENTS <- CLEANED_TRANSCRIPTS <- NULL
+    PLOTS <- TABLES <- REPORTS <- CORRESPONDENCE <- DOCUMENTS <- NULL
     y <- invisible(folder(ANALYSIS, CODEBOOK, DATA, DATA_FOR_REVIEW, 
-        RAW_TRANSCRIPTS, PLOTS, TABLES, CM_DATA, WORD_LISTS, REPORTS, 
-        CORRESPONDENCE, DOCUMENTS, CLEANED_TRANSCRIPTS, RAW_DATA))
+        PLOTS, TABLES, REPORTS, CORRESPONDENCE, DOCUMENTS,
+        RAW_DATA))  
     todo <- paste("#when a task is complete put - in front of the item",
         "#Use hanging indent",
         "1. Task 1", sep = "\n")
@@ -99,61 +100,26 @@ new_project <- function(project = "new", path = getwd()) {
     cat(paste0("Project \"", project, "\" created: ", Sys.time(), "\n"), 
         file=paste0(x, "/", "LOG.txt"))
     invisible(folder(folder.name=paste0(y[[4]], "/", "ALREADY_REVIEWED")))
-    dats <- c("AUDIO", "VIDEO", "FIELD_NOTES", "INTERVIEWS", "PAPER_ARTIFACTS", 
-        "PHOTOGRAPHS")
-    invisible(folder(folder.name=paste0(y[[14]], "/", dats)))
-    cat(paste0("library(qdap)\ndir_map(\"", 
-        y[[13]], "\")\n\n\n\n", 
-    "len <- length(dir(\"", y[[13]], "\"))\n",
-    "L1 <- lapply(paste0(\"dat\", 1:len), function(x) get(x))\n", 
-    "names(L1) <- paste0(\"dat\", 1:len)\n",
-    "\n\n\n\nsave( , file = \"", y[[3]], 
-        "/cleaned.RData\")\n"), file=paste0(y[[1]], "/", 
-        "01_clean_data.R"))
-    cat(paste0("library(qdap, ggplot2, grid, scales)\nsource(\"",
+    cat(file=file.path(y[[1]], "01_clean_data.R"))
+    cat(paste0("library(ggplot2, grid, scales)\nsource(\"",
         paste0(x, "/", "extra_functions.R"), "\")\n",
         paste0("load(\"", y[[3]], "/cleaned.RData", "\")")),
         file=paste0(y[[1]], "/", "02_analysis_I.R"))
-    cat(paste0("library(qdap, ggplot2, grid, scales)\nsource(\"",
+    cat(paste0("library(ggplot2, grid, scales)\nsource(\"",
         paste0(x, "/", "extra_functions.R"), "\")\n",
         paste0("load(\"", y[[3]], "/cleaned.RData", "\")\n"),
-        paste0("setwd(\"", y[[6]], "\")\n")),
+        paste0("setwd(\"", y[[5]], "\")\n")),
         file=paste0(y[[1]], "/", "03_plots.R"))
     root <- system.file("extdata/docs", package = "qdap")
     pdfloc <- paste0(root, "/PROJECT_WORKFLOW_GUIDE.pdf")
     invisible(file.copy(pdfloc, x))
-    pdfloc2 <- paste0(root, "/report_1.rnw")
-    invisible(file.copy(pdfloc2, y[[10]]))
-    pdfloc3 <- paste0(root, "/preamble.tex")
-    invisible(file.copy(pdfloc3, y[[10]]))
-    pdfloc4 <- paste0(root, "/TEMP.txt")
+    pdfloc4 <- file.path(root, "TEMP.txt")
     invisible(file.copy(pdfloc4, x))
     invisible(file.rename(paste0(x, "/TEMP.txt"), 
-        paste0(x, "/",  project, ".Rproj")))
-    pdfloc5 <- paste0(root, "/extra_functions.R")
+        file.path(x,  paste0(project, ".Rproj"))))
+    pdfloc5 <- file.path(root, "extra_functions.R")
     invisible(file.copy(pdfloc5, x))
     doc1 <- system.file("CITATION", package = "qdap")
-    cite <- readLines(doc1)
-    cite2 <- cite[4:10]
-    cite2 <- gsub("= \"", "= {", cite2)
-    cite2 <- gsub("\",", "},", cite2)
-    cite2[1] <- "@MANUAL{Rinker,"
-    cite2[8] <- "}\n"
-    doc2 <- system.file("CITATION")
-    citeb <- readLines(doc2)
-    cite2b <- citeb[1:8]
-    cite2b <- gsub("= \"", "= {", cite2b)
-    cite2b <- gsub("\",", "},", cite2b)
-    cite2b <- gsub(" person(\"", " {{", cite2b, fixed = TRUE)
-    cite2b <- gsub("\"),", "}},", cite2b, fixed = TRUE)
-    cite2b <- gsub(": A", ": {A}", cite2b)
-    Rinf <- R.Version()
-    cite2b <- gsub("version$year,", paste0("{", Rinf$year, "},"), cite2b, fixed = TRUE)
-    cite2b[grepl("ISBN", cite2b)] <- paste0("         note         = {", Rinf$version.string, "},")
-    cite2b[1] <- "@MANUAL{R,"
-    cite2b[8] <- "}\n"
-    cite2 <- paste(c(cite2b, "", cite2), collapse="\n")
-    cat(cite2, file = paste0(y[[10]], "/project.bib"))
     info <- c("PROJECT NAME: Project", 
         "CLIENT/LEAD RESEARCHER: lead_researcher<numero_uno@email> 555-555-5555[skype: num1]",
         "ANALYST: analyst_name<analyst@email> 555-555-5555[skype: analyst_guy12]",
@@ -163,7 +129,7 @@ new_project <- function(project = "new", path = getwd()) {
         paste("PROJECT CREATED:", Sys.time())
     )
     info <- paste(info, collapse = "\n\n")
-    cat(info, file=paste0(y[[11]], "/", "CONTACT_INFO.txt"))
+    cat(info, file=paste0(y[[8]], "/", "CONTACT_INFO.txt"))
     write.csv(data.frame(person=""), file=paste0(y[[2]], "/", "KEY.csv"), 
         row.names = FALSE)
     rpro <- c("#load the packages used",
@@ -191,6 +157,8 @@ new_project <- function(project = "new", path = getwd()) {
         "    lapply(dat, load)",
         "}")
     cat(paste(rpro, collapse = "\n"), file = paste0(x, "/.Rprofile"))
+    setwd(y[[7]])
     cat(paste0("Project \"", project, "\" created:\n",
-        x, "\n"))    
+        x, "\n"))  
+    new_report(project, ...)  
 }

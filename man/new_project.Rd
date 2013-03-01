@@ -2,7 +2,7 @@
 \alias{new_project}
 \title{Project Template}
 \usage{
-  new_project(project = "new", path = getwd())
+  new_project(project = "new", path = getwd(), ...)
 }
 \arguments{
   \item{project}{A character vector of the project name.}
@@ -14,7 +14,8 @@
   Creates a project template.
 }
 \description{
-  Generate a project template to increase efficiency.
+  Generate a bnasic quantitative project template to
+  increase efficiency.
 }
 \details{
   The project template includes these main directories and
