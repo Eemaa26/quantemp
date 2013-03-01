@@ -2,13 +2,19 @@
 \alias{new_project}
 \title{Project Template}
 \usage{
-  new_project(project = "new", path = getwd(), ...)
+  new_project(project = "new", path = getwd(),
+    template = "apa6.mod.quant_rnw", ...)
 }
 \arguments{
   \item{project}{A character vector of the project name.}
 
   \item{path}{The path to where the project should be
   created.  Default is the current working directory.}
+
+  \item{template}{A template from the reports package.}
+
+  \item{\ldots}{Other arguments passed to
+  \code{\link[reports]{new_report}}.}
 }
 \value{
   Creates a project template.

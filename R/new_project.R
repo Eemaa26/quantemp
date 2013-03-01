@@ -5,6 +5,8 @@
 #' @param project A character vector of the project name.
 #' @param path The path to where the project should be created.  Default is the 
 #' current working directory.
+#' @param template A template from the reports package.
+#' @param \ldots Other arguments passed to \code{\link[reports]{new_report}}.
 #' @details The project template includes these main directories and scripts:
 #' \itemize{
 #' \item{ANALYSIS}{ - A directory containing the following analysis scripts:
@@ -64,7 +66,8 @@
 #' @return Creates a project template.
 #' @keywords project, workflow
 #' @export
-new_project <- function(project = "new", path = getwd(), ...) {
+new_project <- function(project = "new", path = getwd(), 
+	template = "apa6.mod.quant_rnw", ...) {
     WD <- getwd()
     on.exit(setwd(WD))
     if(file.exists(paste0(path, "/", project))) {
@@ -150,7 +153,7 @@ new_project <- function(project = "new", path = getwd(), ...) {
         "    lapply(dat, load)",
         "}")
     cat(paste(rpro, collapse = "\n"), file = paste0(x, "/.Rprofile"))
-    invisible(new_report(c("REPORTS", project), ...))
+    invisible(new_report(c("REPORTS", project), template = template, ...))
         o <- paste0("Project \"", project, "\" created:\n",
         x, "\n") 
     class(o) <- "quantemp"
