@@ -1,6 +1,6 @@
 #' Project Template
 #' 
-#' Generate a bnasic quantitative project template to increase efficiency.
+#' Generate a basic quantitative project template to increase efficiency.
 #' 
 #' @param project A character vector of the project name.
 #' @param path The path to where the project should be created.  Default is the 
@@ -41,15 +41,8 @@
 #'     } 
 #' }
 #' \item{RAW_TRANSCRIPTS}{ - A directory to store the raw transcripts}
-#' \item{REPORTS}{ - A directory to house reports; contains:
-#' \itemize{
-#'     \item{report_1.rnw}{ * A latex rnw file for use with \href{http://yihui.name/knitr/}{knitr}}
-#'     \item{project.bib}{ * A latex bibtex file}
-#'     \item{preamble.tex}{ * A tex file that \code{report_1.rnw} references to generate the preamble}
-#'     }
-#' }
+#' \item{REPORTS}{ - A directory with report and presentation related tools.  Please see the \cr \href{https://dl.dropbox.com/u/61803503/packages/REPORT_WORKFLOW_GUIDE.pdf}{REPORT_WORKFLOW_GUIDE.pdf} for more details}
 #' \item{TABLES}{ - A directory to export tables to}  
-#' \item{WORD_LISTS}{ - A directory to store word lists that can be sourced and supplied to functions}
 #' \item{.Rprofile}{ - Performs certan tasks such as loading libraries, data and sourcing functions upon startup in \href{http://www.rstudio.com/}{RStudio}} 
 #' \item{extra_functions.R}{ - A script to store user made functions related to the project
 #' \itemize{
@@ -89,9 +82,9 @@ new_project <- function(project = "new", path = getwd(), ...) {
     x <- file.path(path, project)  
     setwd(x)
     ANALYSIS <- CODEBOOK <- DATA <- DATA_FOR_REVIEW <- RAW_DATA <- NULL
-    PLOTS <- TABLES <- REPORTS <- CORRESPONDENCE <- DOCUMENTS <- NULL
+    PLOTS <- TABLES <- CORRESPONDENCE <- DOCUMENTS <- NULL
     y <- invisible(folder(ANALYSIS, CODEBOOK, DATA, DATA_FOR_REVIEW, 
-        PLOTS, TABLES, REPORTS, CORRESPONDENCE, DOCUMENTS,
+        PLOTS, TABLES, CORRESPONDENCE, DOCUMENTS,
         RAW_DATA))  
     todo <- paste("#when a task is complete put - in front of the item",
         "#Use hanging indent",
@@ -129,7 +122,7 @@ new_project <- function(project = "new", path = getwd(), ...) {
         paste("PROJECT CREATED:", Sys.time())
     )
     info <- paste(info, collapse = "\n\n")
-    cat(info, file=paste0(y[[8]], "/", "CONTACT_INFO.txt"))
+    cat(info, file=paste0(y[[7]], "/", "CONTACT_INFO.txt"))
     write.csv(data.frame(person=""), file=paste0(y[[2]], "/", "KEY.csv"), 
         row.names = FALSE)
     rpro <- c("#load the packages used",
@@ -139,7 +132,7 @@ new_project <- function(project = "new", path = getwd(), ...) {
         "library(grid)",
         "library(scales)",
         "library(RColorBrewer)",
-        "library(qdap)",
+        "library(reports)",
         "",
         "WD <- getwd()",
         "",
@@ -157,8 +150,26 @@ new_project <- function(project = "new", path = getwd(), ...) {
         "    lapply(dat, load)",
         "}")
     cat(paste(rpro, collapse = "\n"), file = paste0(x, "/.Rprofile"))
-    setwd(y[[7]])
-    cat(paste0("Project \"", project, "\" created:\n",
-        x, "\n"))  
-    new_report(project, ...)  
+    invisible(new_report(c("REPORTS", project), ...))
+        o <- paste0("Project \"", project, "\" created:\n",
+        x, "\n") 
+    class(o) <- "quantemp"
+    return(o)     
 }
+
+#' Prints a quantemp Object
+#' 
+#' Prints a quantemp object.
+#' 
+#' @param x The quantemp object.
+#' @param \ldots ignored
+#' @method print quantemp
+#' @S3method print quantemp
+print.quantemp <-
+function(x, ...) {
+    class(x) <- NULL
+    cat(x)
+}
+
+
+

@@ -1,1 +1,2 @@
 export(new_project)
+S3method(print,quantemp)
