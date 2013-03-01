@@ -1,0 +1,16 @@
+citHeader("To cite quantemp in publications, please use:")
+
+
+citEntry(entry = "manual",
+    title = "{quantemp}: {P}ackage to asssist in quantitative analysis and workflow",
+    author = "Tyler W. Rinker",
+    organization = "University at Buffalo/SUNY",
+    address = "Buffalo, New York",
+    note = "version 0.1.0",
+    year = "2013",
+    url = "http://github.com/trinker/quantemp",
+    textVersion  = paste("Rinker, T. W. (2013).",
+        "quantemp: Package to asssist in quantitative analysis and workflow.",
+        "version 0.1.0. University at Buffalo. Buffalo, New York.",
+        "http://github.com/trinker/quantemp")
+)
