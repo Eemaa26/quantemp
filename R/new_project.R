@@ -66,6 +66,7 @@
 #' @return Creates a project template.
 #' @keywords project, workflow
 #' @export
+#' @import reports
 new_project <- function(project = "new", path = getwd(), 
 	template = "apa6.mod.quant_rnw", ...) {
     WD <- getwd()
@@ -154,8 +155,7 @@ new_project <- function(project = "new", path = getwd(),
         "}")
     cat(paste(rpro, collapse = "\n"), file = paste0(x, "/.Rprofile"))
     invisible(new_report(c("REPORTS", project), template = template, ...))
-        o <- paste0("Project \"", project, "\" created:\n",
-        x, "\n") 
+    o <- paste0("Project \"", project, "\" created:\n", x, "\n") 
     class(o) <- "quantemp"
     return(o)     
 }
