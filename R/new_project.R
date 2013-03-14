@@ -107,7 +107,7 @@ new_project <- function(project = "new", path = getwd(),
         paste0("load(\"", y[[3]], "/cleaned.RData", "\")\n"),
         paste0("setwd(\"", y[[5]], "\")\n")),
         file=paste0(y[[1]], "/", "03_plots.R"))
-    root <- system.file("extdata/docs", package = "qdap")
+    root <- system.file("extdata/docs", package = "qdantemp")
     pdfloc <- paste0(root, "/PROJECT_WORKFLOW_GUIDE.pdf")
     invisible(file.copy(pdfloc, x))
     pdfloc4 <- file.path(root, "TEMP.txt")
