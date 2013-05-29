@@ -12,7 +12,8 @@ BugReports: http://github.com/trinker/quantemp/issues
 LazyData: TRUE
 Depends:
     R (>= 2.15),
-    reports
+    reports,
+    qdap
 Collate:
     'clean.R'
     'mgsub.R'

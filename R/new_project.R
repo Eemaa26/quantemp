@@ -25,7 +25,7 @@
 #' }
 #' \item{CORRESPONDENCE}{ - A directory to store correspondence and agreements with the client:
 #' \itemize{
-#'     \item{CONTACT_INFO.txt}{ * A txt file to put research team members' contact information}     
+#'     \item{CONTACT_INFO}{ * A txt file to put research team members' contact information}     
 #'     } 
 #' }
 #' \item{DATA}{ - A directory to store cleaned data (generally .RData format)}
@@ -52,9 +52,9 @@
 #'     \item{todo}{ * A function to view, and optionally copy to the clipboard, non-completed tasks from the \code{TO_DO.txt} file}
 #'     }
 #' }
-#' \item{LOG.txt}{ - A text file documenting project changes/needs etc.}
+#' \item{LOG}{ - A text file documenting project changes/needs etc.}
 #' \item{xxx.Rproj}{ - A project file used by \href{http://www.rstudio.com/}{RStudio}; clicking this will open the project in RStudio.} 
-#' \item{TO_DO.txt}{ - A text file documenting project tasks}
+#' \item{TO_DO}{ - A text file documenting project tasks}
 #' }
 #' 
 #' The template comes with a .Rproj file and .Rstudio file.  This makes 
@@ -93,19 +93,19 @@ new_project <- function(project = "new", path = getwd(),
     todo <- paste("#when a task is complete put - in front of the item",
         "#Use hanging indent",
         "1. Task 1", sep = "\n")
-    cat(todo, file=paste0(x, "/", "TO_DO.txt"))
+    cat(todo, file=paste0(x, "/", "TO_DO"))
     cat(paste0("Project \"", project, "\" created: ", Sys.time(), "\n"), 
-        file=paste0(x, "/", "LOG.txt"))
+        file=paste0(x, "/", "LOG"))
     invisible(folder(folder.name=paste0(y[[4]], "/", "ALREADY_REVIEWED")))
     cat(file=file.path(y[[1]], "01_clean_data.R"))
-    cat(paste0("library(ggplot2, grid, scales)\nsource(\"",
-        paste0(x, "/", "extra_functions.R"), "\")\n",
-        paste0("load(\"", y[[3]], "/cleaned.RData", "\")")),
+    cat(paste0("library(ggplot2, grid, scales)\n", 
+        "source(file.path(getwd(), \"extra_functions.R\"))\n",
+        "load(file.path(getwd(), \"DATA/cleaned.RData\"))\n"),
         file=paste0(y[[1]], "/", "02_analysis_I.R"))
-    cat(paste0("library(ggplot2, grid, scales)\nsource(\"",
-        paste0(x, "/", "extra_functions.R"), "\")\n",
-        paste0("load(\"", y[[3]], "/cleaned.RData", "\")\n"),
-        paste0("setwd(\"", y[[5]], "\")\n")),
+    cat(paste0("library(ggplot2, grid, scales)\n",
+        "source(file.path(getwd(), \"extra_functions.R\"))\n",
+        "load(file.path(getwd(), \"DATA/cleaned.RData\"))\n",
+        "setwd(file.path(getwd(), \"PLOTS\"))\n"),
         file=paste0(y[[1]], "/", "03_plots.R"))
     root <- system.file("extdata/docs", package = "quantemp")
     pdfloc <- paste0(root, "/PROJECT_WORKFLOW_GUIDE.pdf")
@@ -126,7 +126,7 @@ new_project <- function(project = "new", path = getwd(),
         paste("PROJECT CREATED:", Sys.time())
     )
     info <- paste(info, collapse = "\n\n")
-    cat(info, file=paste0(y[[7]], "/", "CONTACT_INFO.txt"))
+    cat(info, file=paste0(y[[7]], "/", "CONTACT_INFO"))
     write.csv(data.frame(person=""), file=paste0(y[[2]], "/", "KEY.csv"), 
         row.names = FALSE)
     rpro <- c("#load the packages used",
@@ -137,6 +137,9 @@ new_project <- function(project = "new", path = getwd(),
         "library(scales)",
         "library(RColorBrewer)",
         "library(reports)",
+        "library(qdap)",
+        "library(slidify)",
+        "library(knitr)",
         "",
         "WD <- getwd()",
         "",
