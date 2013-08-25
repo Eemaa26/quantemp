@@ -6,6 +6,7 @@
 #' @param path The path to where the project should be created.  Default is the 
 #' current working directory.
 #' @param template A template from the reports package.
+#' @param open logical.  If \code{TRUE} the project will be opened in RStudio.
 #' @param \ldots Other arguments passed to \code{\link[reports]{new_report}}.
 #' @details The project template includes these main directories and scripts:
 #' \itemize{
@@ -66,9 +67,9 @@
 #' @return Creates a project template.
 #' @keywords project, workflow
 #' @export
-#' @import reports
+#' @importFrom reports new_report folder delete
 new_project <- function(project = "new", path = getwd(), 
-	template = "apa6.mod.quant_rnw", ...) {
+	template = "apa6.mod.quant_rnw", open = FALSE, ...) {
     WD <- getwd()
     on.exit(setwd(WD))
     if(file.exists(paste0(path, "/", project))) {
@@ -98,11 +99,11 @@ new_project <- function(project = "new", path = getwd(),
         file=paste0(x, "/", "LOG.txt"))
     invisible(folder(folder.name=paste0(y[[4]], "/", "ALREADY_REVIEWED")))
     cat(file=file.path(y[[1]], "01_clean_data.R"))
-    cat(paste0("library(ggplot2, grid, scales)\nsource(\"",
+    cat(paste0("lapply(c(\"qdap\", \"ggplot2\", \"grid\", \"scales\"), require, character.only = T)\nsource(\"",
         paste0(x, "/", "extra_functions.R"), "\")\n",
         paste0("load(\"", y[[3]], "/cleaned.RData", "\")")),
         file=paste0(y[[1]], "/", "02_analysis_I.R"))
-    cat(paste0("library(ggplot2, grid, scales)\nsource(\"",
+    cat(paste0("lapply(c(\"qdap\", \"ggplot2\", \"grid\", \"scales\"), require, character.only = T)\nsource(\"",
         paste0(x, "/", "extra_functions.R"), "\")\n",
         paste0("load(\"", y[[3]], "/cleaned.RData", "\")\n"),
         paste0("setwd(\"", y[[5]], "\")\n")),
@@ -157,6 +158,9 @@ new_project <- function(project = "new", path = getwd(),
     invisible(new_report(c("REPORTS", project), template = template, ...))
     o <- paste0("Project \"", project, "\" created:\n", x, "\n") 
     class(o) <- "quantemp"
+    if (open) {
+        open_project(file.path(x, project, paste0(project, ".Rproj")))
+    }    
     return(o)     
 }
 
@@ -175,4 +179,29 @@ function(x, ...) {
 }
 
 
+wheresRstudio <- 
+function() {
+    myPaths <- c("rstudio",  "~/.cabal/bin/rstudio", 
+        "~/Library/Haskell/bin/rstudio", "C:\\PROGRA~1\\RStudio\\bin\\rstudio.exe",
+        "C:\\RStudio\\bin\\rstudio.exe")
+    panloc <- Sys.which(myPaths)
+    temp <- panloc[panloc != ""]
+    if (identical(names(temp), character(0))) {
+        ans <- readline("RStudio not installed in one of the typical locations.\n 
+            Do you know where RStudio is installed? (y/n) ")
+        if (ans == "y") {
+                temp <- readline("Enter the (unquoted) path to RStudio: ")
+        } else {
+            if (ans == "n") {
+                stop("RStudio not installed or not found.")
+            }
+        }
+    } 
+    temp
+}
 
+open_project <- function(Rproj.loc) {
+    action <- paste(wheresRstudio(), Rproj.loc)
+    message("Preparing to open project!")
+    system(action, wait = FALSE, ignore.stderr = TRUE)
+}

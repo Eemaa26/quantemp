@@ -11,8 +11,10 @@ URL: http://trinker.github.com/quantemp/
 BugReports: http://github.com/trinker/quantemp/issues
 LazyData: TRUE
 Depends:
-    R (>= 2.15),
-    reports,
+    R (>= 3.0.0),
+Imports:
+    reports
+Suggests:
     qdap
 Collate:
     'clean.R'
@@ -24,3 +26,4 @@ Collate:
     'strWrap.R'
     'Trim.R'
     'unblanker.R'
+    'reducer.R'

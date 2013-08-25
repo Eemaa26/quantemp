@@ -3,7 +3,7 @@
 \title{Project Template}
 \usage{
   new_project(project = "new", path = getwd(),
-    template = "apa6.mod.quant_rnw", ...)
+    template = "apa6.mod.quant_rnw", open = FALSE, ...)
 }
 \arguments{
   \item{project}{A character vector of the project name.}
@@ -12,6 +12,9 @@
   created.  Default is the current working directory.}
 
   \item{template}{A template from the reports package.}
+
+  \item{open}{logical.  If \code{TRUE} the project will be
+  opened in RStudio.}
 
   \item{\ldots}{Other arguments passed to
   \code{\link[reports]{new_report}}.}
