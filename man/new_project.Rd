@@ -4,7 +4,7 @@
 \usage{
   new_project(project = "new", path = getwd(),
     template = "apa6.mod.quant_rnw",
-    open = reports::is.global(), ...)
+    open = reports::is.global(2), ...)
 }
 \arguments{
   \item{project}{A character vector of the project name.}
