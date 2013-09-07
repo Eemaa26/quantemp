@@ -6,7 +6,9 @@
 #' @param path The path to where the project should be created.  Default is the 
 #' current working directory.
 #' @param template A template from the reports package.
-#' @param open logical.  If \code{TRUE} the project will be opened in RStudio.
+#' @param open logical.  If \code{TRUE} the project will be opened in RStudio.  
+#' The default is to test if \code{new_project} is being used in the global 
+#' environment, if it is then the project directory will be opened.  
 #' @param \ldots Other arguments passed to \code{\link[reports]{new_report}}.
 #' @details The project template includes these main directories and scripts:
 #' \itemize{
@@ -69,7 +71,7 @@
 #' @export
 #' @importFrom reports new_report folder delete
 new_project <- function(project = "new", path = getwd(), 
-	template = "apa6.mod.quant_rnw", open = FALSE, ...) {
+	template = "apa6.mod.quant_rnw", open = is.global(), ...) {
     WD <- getwd()
     on.exit(setwd(WD))
     if(file.exists(paste0(path, "/", project))) {

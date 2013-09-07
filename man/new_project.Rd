@@ -3,7 +3,8 @@
 \title{Project Template}
 \usage{
   new_project(project = "new", path = getwd(),
-    template = "apa6.mod.quant_rnw", open = FALSE, ...)
+    template = "apa6.mod.quant_rnw", open = is.global(),
+    ...)
 }
 \arguments{
   \item{project}{A character vector of the project name.}
@@ -14,7 +15,10 @@
   \item{template}{A template from the reports package.}
 
   \item{open}{logical.  If \code{TRUE} the project will be
-  opened in RStudio.}
+  opened in RStudio. The default is to test if
+  \code{new_project} is being used in the global
+  environment, if it is then the project directory will be
+  opened.}
 
   \item{\ldots}{Other arguments passed to
   \code{\link[reports]{new_report}}.}
