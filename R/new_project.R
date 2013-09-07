@@ -76,7 +76,7 @@ new_project <- function(project = "new", path = getwd(),
     on.exit(setwd(WD))
     if(file.exists(paste0(path, "/", project))) {
         cat(paste0("\"", paste0(path, "/", project), 
-            "\" already exists:\nDo you want to overwrite?\n\n"))
+            "\" already exists:\nDo you want to overwrite?\n"))
         ans <- menu(c("Yes", "No")) 
         if (ans == "2") {
             stop("new_project aborted")
