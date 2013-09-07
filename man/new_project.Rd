@@ -3,8 +3,8 @@
 \title{Project Template}
 \usage{
   new_project(project = "new", path = getwd(),
-    template = "apa6.mod.quant_rnw", open = is.global(),
-    ...)
+    template = "apa6.mod.quant_rnw",
+    open = reports::is.global(), ...)
 }
 \arguments{
   \item{project}{A character vector of the project name.}

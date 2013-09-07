@@ -69,9 +69,9 @@
 #' @return Creates a project template.
 #' @keywords project, workflow
 #' @export
-#' @importFrom reports new_report folder delete
+#' @importFrom reports new_report folder delete is.global
 new_project <- function(project = "new", path = getwd(), 
-	template = "apa6.mod.quant_rnw", open = is.global(), ...) {
+	template = "apa6.mod.quant_rnw", open = reports::is.global(), ...) {
     WD <- getwd()
     on.exit(setwd(WD))
     if(file.exists(paste0(path, "/", project))) {

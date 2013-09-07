@@ -1,5 +1,6 @@
 export(new_project)
 importFrom(reports,delete)
 importFrom(reports,folder)
+importFrom(reports,is.global)
 importFrom(reports,new_report)
 S3method(print,quantemp)
