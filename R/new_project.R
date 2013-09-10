@@ -9,6 +9,8 @@
 #' @param open logical.  If \code{TRUE} the project will be opened in RStudio.  
 #' The default is to test if \code{new_project} is being used in the global 
 #' environment, if it is then the project directory will be opened.  
+#' @param github logical.  If \code{TRUE} the repo will be sent to public 
+#' \href{https://github.com/}{GitHub} account.
 #' @param \ldots Other arguments passed to \code{\link[reports]{new_report}}.
 #' @details The project template includes these main directories and scripts:
 #' \itemize{
@@ -69,9 +71,10 @@
 #' @return Creates a project template.
 #' @keywords project, workflow
 #' @export
-#' @importFrom reports new_report folder delete is.global
+#' @importFrom reports new_report folder delete is.global repo2github
 new_project <- function(project = "new", path = getwd(), 
-	template = "apa6.mod.quant_rnw", open = reports::is.global(2), ...) {
+	template = "apa6.mod.quant_rnw", open = reports::is.global(2), 
+	github = FALSE, ...) {
     WD <- getwd()
     on.exit(setwd(WD))
     if(file.exists(paste0(path, "/", project))) {
@@ -162,6 +165,13 @@ new_project <- function(project = "new", path = getwd(),
     invisible(new_report(c("REPORTS", project), template = template, ...))
     o <- paste0("Project \"", project, "\" created:\n", x, "\n") 
     class(o) <- "quantemp"
+    
+    ## Send to github
+    if (github) {
+      try(repo2github(project.dir = x))
+    }
+    
+    ## Open Project in RStudio
     if (open) {
         open_project(file.path(x, project, paste0(project, ".Rproj")))
     }    
