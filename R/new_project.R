@@ -38,15 +38,7 @@
 #' \item{DOCUMENTS}{ - A directory to store documents related to the project}
 #' \item{PLOTS}{ - A directory to store plots}
 #' \item{PROJECT_WORKFLOW_GUIDE.pdf}{ * A pdf explaining the structure of the project template}
-#' \item{RAW_DATA}{ - A directory to store non-transcript data related to the project:
-#' \itemize{
-#'     \item{AUDIO}{ * A directory to put audio files (or shortcuts)}     
-#'     \item{FIELD_NOTES}{ * A directory to put audio files (or shortcuts)}   
-#'     \item{PAPER_ARTIFACTS}{ * A dirrectory to put paper artifacts}  
-#'     \item{PHOTOGRAPHS}{ * A directory to put photographs}  
-#'     \item{VIDEO}{ * A directory to put video files (or shortcuts)}  
-#'     } 
-#' }
+#' \item{RAW_DATA}{ - A directory to store raw data related to the project}
 #' \item{RAW_TRANSCRIPTS}{ - A directory to store the raw transcripts}
 #' \item{REPORTS}{ - A directory with report and presentation related tools.  Please see the \cr \href{https://dl.dropbox.com/u/61803503/packages/REPORT_WORKFLOW_GUIDE.pdf}{REPORT_WORKFLOW_GUIDE.pdf} for more details}
 #' \item{TABLES}{ - A directory to export tables to}  
@@ -71,10 +63,11 @@
 #' @return Creates a project template.
 #' @keywords project, workflow
 #' @export
-#' @importFrom reports new_report folder delete is.global repo2github
+#' @importFrom reports new_report folder delete is.global repo2github UF
 new_project <- function(project = "new", path = getwd(), 
 	template = "apa6.mod.quant_rnw", open = reports::is.global(2), 
 	github = FALSE, ...) {
+    project <- UF(project)
     WD <- getwd()
     on.exit(setwd(WD))
     if(file.exists(paste0(path, "/", project))) {
